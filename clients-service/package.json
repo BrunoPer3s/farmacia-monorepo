@@ -1,0 +1,20 @@
+{
+  "name": "clients-service",
+  "version": "1.0.0",
+  "description": "Microsserviço de clients-service",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.0",
+    "express": "^5.2.1",
+    "mysql2": "^3.17.0",
+    "nodemon": "^3.1.11"
+  }
+}

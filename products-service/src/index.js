@@ -1,0 +1,21 @@
+const express = require('express');
+const cors = require('cors');
+require('dotenv').config();
+
+const productRoutes = require('./routes');
+
+const app = express();
+const PORT = process.env.PORT || 3001;
+
+app.use(cors());
+app.use(express.json());
+
+app.use('/products', productRoutes);
+
+app.get('/', (req, res) => {
+    res.json({ message: "API de Produtos Online 💊" });
+});
+
+app.listen(PORT, () => {
+    console.log(`Serviço de Produtos rodando na porta ${PORT}`);
+});

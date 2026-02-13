@@ -1,0 +1,99 @@
+openapi: 3.0.0
+info:
+  title: Clients Service API
+  description: Gerenciamento de clientes da farmácia (Acesso Restrito a Admins).
+  version: 1.0.0
+servers:
+  - url: http://localhost:3002
+    description: Servidor de Clientes
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ClientInput:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+security:
+  - bearerAuth: []
+
+paths:
+  /:
+    get:
+      summary: Lista todos os clientes
+      description: Retorna uma lista de usuários com role="client". Requer token de Admin.
+      tags: [Clients]
+      responses:
+        200:
+          description: Lista retornada com sucesso
+        401:
+          description: Não autorizado (Token ausente)
+        403:
+          description: Proibido (Apenas Admins)
+    post:
+      summary: Cria um novo cliente
+      tags: [Clients]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientInput'
+      responses:
+        201:
+          description: Cliente criado com sucesso
+        400:
+          description: Dados inválidos
+  /{id}:
+    put:
+      summary: Atualiza um cliente existente
+      tags: [Clients]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID do cliente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+      responses:
+        200:
+          description: Cliente atualizado
+        404:
+          description: Cliente não encontrado
+    delete:
+      summary: Remove um cliente
+      tags: [Clients]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        200:
+          description: Cliente removido
+        404:
+          description: Cliente não encontrado

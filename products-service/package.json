@@ -19,7 +19,8 @@
     "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.17.0",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "eslint": "^10.0.0",

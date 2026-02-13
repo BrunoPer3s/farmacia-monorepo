@@ -1,0 +1,116 @@
+openapi: 3.0.0
+info:
+  title: Products Service API
+  description: Catálogo de medicamentos. Leitura para todos os funcionários, Escrita apenas para Admin.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001
+    description: Servidor de Produtos
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Product:
+      type: object
+      required:
+        - name
+        - price
+      properties:
+        name:
+          type: string
+          example: "Dipirona 500mg"
+        laboratory:
+          type: string
+          example: "Medley"
+        price:
+          type: number
+          format: float
+          example: 5.99
+        stock_quantity:
+          type: integer
+          example: 100
+        description:
+          type: string
+          example: "Analgésico e antitérmico"
+
+# Aplica segurança em TODAS as rotas deste arquivo
+security:
+  - bearerAuth: []
+
+paths:
+  /:
+    get:
+      summary: Lista todos os produtos
+      tags: [Products]
+      responses:
+        200:
+          description: Lista de produtos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+    post:
+      summary: Cria um novo produto (Admin)
+      tags: [Products]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        201:
+          description: Produto criado
+        403:
+          description: Acesso negado (Não é Admin)
+
+  /{id}:
+    get:
+      summary: Detalhes de um produto
+      tags: [Products]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Detalhes do produto
+        404:
+          description: Produto não encontrado
+    put:
+      summary: Atualiza um produto (Admin)
+      tags: [Products]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        200:
+          description: Produto atualizado
+    delete:
+      summary: Remove um produto (Admin)
+      tags: [Products]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Produto removido

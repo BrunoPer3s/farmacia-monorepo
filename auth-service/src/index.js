@@ -11,7 +11,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 try {
-    const swaggerPath = path.join(__dirname, '..', 'docs', 'swagger.yaml');
+    const swaggerPath = path.join(__dirname, 'docs', 'swagger.yaml');
     
     const swaggerDocument = YAML.load(swaggerPath);
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));

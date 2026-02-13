@@ -1,0 +1,60 @@
+name: CI Pipeline - Farmácia API
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  test-products-service:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./products-service
+
+    steps:
+    - name: Baixar o código (Checkout)
+      uses: actions/checkout@v4
+
+    - name: Instalar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: products-service/package-lock.json
+
+    - name: Instalar Dependências
+      run: npm ci
+
+    - name: Rodar Testes (Jest)
+      run: npm test
+
+  test-clients-service:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Instalar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    - name: Instalar e Testar (Clientes)
+      working-directory: ./clients-service
+      run: |
+        npm install
+        npm test
+
+  test-auth-service:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Instalar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    - name: Instalar e Testar (Auth)
+      working-directory: ./auth-service
+      run: |
+        npm install
+        npm test

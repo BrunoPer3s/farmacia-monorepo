@@ -1,26 +1,20 @@
 version: '3.8'
 
 services:
-  # ------------------------------------------------------------
-  # 1. O Banco de Dados (Simulando o AWS RDS)
-  # ------------------------------------------------------------
   database:
     image: mysql:8.0
     container_name: farmacia-db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: farmacia_db
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql # Salva os dados mesmo se desligar o container
-
-  # ------------------------------------------------------------
-  # 2. Microsserviço: Produtos (Recurso Principal)
-  # ------------------------------------------------------------
+      - mysql_data:/var/lib/mysql
+  
   products-service:
     build: ./products-service
     container_name: products-api
@@ -29,17 +23,15 @@ services:
     depends_on:
       - database
     environment:
-      - PORT=3001
-      - DB_HOST=database # Nome do serviço acima
-      - DB_USER=user
-      - DB_PASS=password
-      - DB_NAME=farmacia_db
+      - PORT=${PORT_PRODUCTS}
+      - DB_HOST=database
+      - DB_USER=${MYSQL_USER}
+      - DB_PASS=${MYSQL_PASSWORD}
+      - DB_NAME=${MYSQL_DATABASE}
+      - JWT_SECRET=${JWT_SECRET}
     volumes:
-      - ./products-service/src:/app/src # "Hot Reload": mudou o código, atualiza na hora
+      - ./products-service/src:/app/src
 
-  # ------------------------------------------------------------
-  # 3. Microsserviço: Clientes
-  # ------------------------------------------------------------
   clients-service:
     build: ./clients-service
     container_name: clients-api
@@ -48,17 +40,15 @@ services:
     depends_on:
       - database
     environment:
-      - PORT=3002
+      - PORT=${PORT_CLIENTS}
       - DB_HOST=database
-      - DB_USER=user
-      - DB_PASS=password
-      - DB_NAME=farmacia_db
+      - DB_USER=${MYSQL_USER}
+      - DB_PASS=${MYSQL_PASSWORD}
+      - DB_NAME=${MYSQL_DATABASE}
+      - JWT_SECRET=${JWT_SECRET}
     volumes:
       - ./clients-service/src:/app/src
 
-  # ------------------------------------------------------------
-  # 4. Microsserviço: Autenticação
-  # ------------------------------------------------------------
   auth-service:
     build: ./auth-service
     container_name: auth-api
@@ -67,11 +57,12 @@ services:
     depends_on:
       - database
     environment:
-      - PORT=3000
+      - PORT=${PORT_AUTH}
       - DB_HOST=database
-      - DB_USER=user
-      - DB_PASS=password
-      - DB_NAME=farmacia_db
+      - DB_USER=${MYSQL_USER}
+      - DB_PASS=${MYSQL_PASSWORD}
+      - DB_NAME=${MYSQL_DATABASE}
+      - JWT_SECRET=${JWT_SECRET}
     volumes:
       - ./auth-service/src:/app/src
 

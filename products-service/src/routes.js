@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('./db');
+const verificarToken = require('./middleware');
 
 router.get('/', async (req, res) => {
     try {
@@ -22,7 +23,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', verificarToken, async (req, res) => {
     const { name, laboratory, price, stock_quantity, description } = req.body;
     
     if (!name || !price) {
@@ -44,7 +45,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', verificarToken, async (req, res) => {
     const { name, price, stock_quantity } = req.body;
     const { id } = req.params;
 
@@ -60,7 +61,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verificarToken, async (req, res) => {
     try {
         const [result] = await db.query('DELETE FROM products WHERE id = ?', [req.params.id]);
         

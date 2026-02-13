@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const db = require('./db');
-const verificarToken = require('./middleware');
+const {apenasAdmin, autenticado} = require('./middleware');
 
-router.get('/', async (req, res) => {
+router.get('/', autenticado, async (req, res) => {
     try {
         const [rows] = await db.query('SELECT * FROM products');
         res.json(rows);
@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', autenticado, async (req, res) => {
     try {
         const [rows] = await db.query('SELECT * FROM products WHERE id = ?', [req.params.id]);
         if (rows.length === 0) return res.status(404).json({ error: 'Produto não encontrado' });
@@ -23,7 +23,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.post('/', verificarToken, async (req, res) => {
+router.post('/', apenasAdmin, async (req, res) => {
     const { name, laboratory, price, stock_quantity, description } = req.body;
     
     if (!name || !price) {
@@ -45,7 +45,7 @@ router.post('/', verificarToken, async (req, res) => {
     }
 });
 
-router.put('/:id', verificarToken, async (req, res) => {
+router.put('/:id', apenasAdmin, async (req, res) => {
     const { name, price, stock_quantity } = req.body;
     const { id } = req.params;
 
@@ -61,7 +61,7 @@ router.put('/:id', verificarToken, async (req, res) => {
     }
 });
 
-router.delete('/:id', verificarToken, async (req, res) => {
+router.delete('/:id', apenasAdmin, async (req, res) => {
     try {
         const [result] = await db.query('DELETE FROM products WHERE id = ?', [req.params.id]);
         

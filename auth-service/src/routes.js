@@ -50,9 +50,9 @@ router.post('/login', async (req, res) => {
         }
 
         const token = jwt.sign(
-            { id: user.id, role: user.role, name: user.name }, // Payload (dados dentro do token)
-            process.env.JWT_SECRET || 'segredo',              // Chave secreta
-            { expiresIn: '1h' }                               // Expira em 1 hora
+            { id: user.id, role: user.role, name: user.name },
+            process.env.JWT_SECRET || 'segredo',
+            { expiresIn: '1h' }
         );
 
         res.json({ token, user: { id: user.id, name: user.name, role: user.role } });

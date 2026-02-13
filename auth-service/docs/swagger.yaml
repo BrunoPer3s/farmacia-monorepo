@@ -1,0 +1,75 @@
+openapi: 3.0.0
+info:
+  title: Auth Service API
+  description: Microsserviço responsável por Login e Registro.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: Servidor Local
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+          enum: [admin, client]
+          default: client
+paths:
+  /auth/register:
+    post:
+      summary: Cadastra um novo usuário
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        201:
+          description: Usuário criado com sucesso
+        400:
+          description: Erro de validação
+  /auth/login:
+    post:
+      summary: Realiza login e retorna Token JWT
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: Login realizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  user:
+                    type: object
+        401:
+          description: Credenciais inválidas

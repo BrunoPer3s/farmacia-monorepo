@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const db = require('./db');
+const {apenasAdmin, autenticado} = require('./middleware');
 
-router.get('/', async (req, res) => {
+router.get('/', apenasAdmin, async (req, res) => {
     try {
         const [rows] = await db.query('SELECT id, name, email, role, created_at FROM users WHERE role = "client"');
         res.json(rows);
@@ -12,7 +13,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', apenasAdmin, async (req, res) => {
     const { name, email, password } = req.body;
     
     if (!name || !email || !password) {
@@ -34,7 +35,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', apenasAdmin, async (req, res) => {
     const { name, email } = req.body;
     const { id } = req.params;
 
@@ -50,7 +51,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', apenasAdmin, async (req, res) => {
     try {
         const [result] = await db.query('DELETE FROM users WHERE id = ? AND role = "client"', [req.params.id]);
         

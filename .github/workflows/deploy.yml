@@ -34,7 +34,7 @@ jobs:
           - service: clients
             folder: clients-service
             ecr_repo: clients-service
-            ecs_service: clients-service
+            ecs_service: clients-task-service-snmfza3s
             container_name: clients-container
             task_def: clients-task
 

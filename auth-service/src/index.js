@@ -14,7 +14,7 @@ try {
     const swaggerPath = path.join(__dirname, 'docs', 'swagger.yaml');
     
     const swaggerDocument = YAML.load(swaggerPath);
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+    app.use('/auth/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
     console.log(`Swagger carregado com sucesso de: ${swaggerPath}`);
 
 } catch (error) {

@@ -15,7 +15,7 @@ app.use(cors());
 try {
     const swaggerPath = path.join(__dirname, 'docs', 'swagger.yaml');
     const swaggerDocument = YAML.load(swaggerPath);
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+    app.use('/clients/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 } catch (error) {
     console.error("Erro ao carregar Swagger:", error.message);
 }

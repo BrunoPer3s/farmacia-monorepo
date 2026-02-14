@@ -4,8 +4,8 @@ info:
   description: Microsserviço responsável por Login e Registro.
   version: 1.0.0
 servers:
-  - url: http://localhost:3000
-    description: Servidor Local
+  - url: '/auth'
+    description: 'API de Autenticação'
 components:
   schemas:
     User:

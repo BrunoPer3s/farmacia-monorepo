@@ -1,4 +1,4 @@
-name: CI Pipeline - Farmácia API
+name: CI Pipeline - Tests & Reports
 
 on:
   push:
@@ -6,55 +6,43 @@ on:
   pull_request:
     branches: [ "main", "master" ]
 
+env:
+  AWS_REGION: us-east-1
+  BUCKET_NAME: farmacia-relatorios-bruno-vini-2026  
+
 jobs:
-  test-products-service:
+  test-and-report:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [auth-service, products-service, clients-service]
 
-    defaults:
-      run:
-        working-directory: ./products-service
-
-    steps:
-    - name: Baixar o código (Checkout)
-      uses: actions/checkout@v4
-
-    - name: Instalar Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
-        cache-dependency-path: products-service/package-lock.json
-
-    - name: Instalar Dependências
-      run: npm ci
-
-    - name: Rodar Testes (Jest)
-      run: npm test
-
-  test-clients-service:
-    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Instalar Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-    - name: Instalar e Testar (Clientes)
-      working-directory: ./clients-service
-      run: |
-        npm install
-        npm test
 
-  test-auth-service:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Instalar Node.js
+    - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-    - name: Instalar e Testar (Auth)
-      working-directory: ./auth-service
+
+    - name: Install Dependencies
+      working-directory: ./${{ matrix.service }}
+      run: npm install
+
+    - name: Run Tests with Coverage
+      working-directory: ./${{ matrix.service }}
+      run: npx jest --coverage
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Upload Coverage to S3
+      working-directory: ./${{ matrix.service }}
       run: |
-        npm install
-        npm test
+        aws s3 sync coverage/lcov-report/ s3://${{ env.BUCKET_NAME }}/coverage/${{ matrix.service }}/${{ github.sha }}/ --delete
+        echo "Relatório salvo em: s3://${{ env.BUCKET_NAME }}/coverage/${{ matrix.service }}/${{ github.sha }}/index.html"

@@ -4,7 +4,7 @@ info:
   description: Catálogo de medicamentos. Leitura para todos os funcionários, Escrita apenas para Admin.
   version: 1.0.0
 servers:
-  - url: http://localhost:3001
+  - url: '/products'
     description: Servidor de Produtos
 components:
   securitySchemes:
@@ -36,7 +36,6 @@ components:
           type: string
           example: "Analgésico e antitérmico"
 
-# Aplica segurança em TODAS as rotas deste arquivo
 security:
   - bearerAuth: []
 

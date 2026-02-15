@@ -5,7 +5,7 @@ const {apenasAdmin, autenticado} = require('./middleware');
 
 router.get('/', apenasAdmin, async (req, res) => {
     try {
-        const [rows] = await db.query('SELECT id, name, email, role, created_at FROM users WHERE role = "client"');
+        const [rows] = await db.query('SELECT id, name, email, role, createdAt FROM users WHERE role = "client"');
         res.json(rows);
     } catch (error) {
         console.error(error);

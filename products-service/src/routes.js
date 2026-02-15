@@ -24,15 +24,15 @@ router.get('/:id', autenticado, async (req, res) => {
 });
 
 router.post('/', apenasAdmin, async (req, res) => {
-    const { name, laboratory, price, stock_quantity, description } = req.body;
+    const { name, description, price, quantity, image_url} = req.body;
     
     if (!name || !price) {
         return res.status(400).json({ error: 'Nome e Preço são obrigatórios' });
     }
 
     try {
-        const sql = 'INSERT INTO products (name, laboratory, price, stock_quantity, description) VALUES (?, ?, ?, ?, ?)';
-        const [result] = await db.query(sql, [name, laboratory, price, stock_quantity, description]);
+        const sql = 'INSERT INTO products (name, description, price, quantity, image_url) VALUES (?, ?, ?, ?, ?)';
+        const [result] = await db.query(sql, [name, description, price, quantity, image_url]);
         
         res.status(201).json({ 
             id: result.insertId, 
@@ -46,12 +46,12 @@ router.post('/', apenasAdmin, async (req, res) => {
 });
 
 router.put('/:id', apenasAdmin, async (req, res) => {
-    const { name, price, stock_quantity } = req.body;
+    const { name, price, quantity } = req.body;
     const { id } = req.params;
 
     try {
-        const sql = 'UPDATE products SET name = ?, price = ?, stock_quantity = ? WHERE id = ?';
-        const [result] = await db.query(sql, [name, price, stock_quantity, id]);
+        const sql = 'UPDATE products SET name = ?, price = ?, quantity = ? WHERE id = ?';
+        const [result] = await db.query(sql, [name, price, quantity, id]);
 
         if (result.affectedRows === 0) return res.status(404).json({ error: 'Produto não encontrado' });
         

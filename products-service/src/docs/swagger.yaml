@@ -33,8 +33,8 @@ components:
           type: integer
           example: 100
         image_url:
-        type: string
-        example: "https://github.com/brunoper3s.png"
+          type: string
+          example: "https://github.com/brunoper3s.png"
 
 security:
   - bearerAuth: []

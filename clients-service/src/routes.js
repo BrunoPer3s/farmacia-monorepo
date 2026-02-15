@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('./db');
-const {apenasAdmin, autenticado} = require('./middleware');
+const {apenasAdmin} = require('./middleware');
 
 router.get('/', apenasAdmin, async (req, res) => {
     try {
@@ -47,6 +47,7 @@ router.put('/:id', apenasAdmin, async (req, res) => {
         
         res.json({ message: 'Cliente atualizado com sucesso!' });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: 'Erro ao atualizar cliente' });
     }
 });
@@ -59,6 +60,7 @@ router.delete('/:id', apenasAdmin, async (req, res) => {
 
         res.json({ message: 'Cliente removido com sucesso' });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: 'Erro ao deletar cliente' });
     }
 });

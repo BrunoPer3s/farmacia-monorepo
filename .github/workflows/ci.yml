@@ -29,6 +29,10 @@ jobs:
       working-directory: ./${{ matrix.service }}
       run: npm install
 
+    - name: Run Linting (ESLint)
+      working-directory: ./${{ matrix.service }}
+      run: npm run lint
+
     - name: Run Tests with Coverage
       working-directory: ./${{ matrix.service }}
       run: npx jest --coverage

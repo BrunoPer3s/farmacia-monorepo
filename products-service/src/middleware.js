@@ -17,6 +17,7 @@ module.exports = {
             req.user = decoded;
             next();
         } catch (error) {
+            console.error(error);
             return res.status(403).json({ error: 'Token inválido.' });
         }
     },
@@ -36,6 +37,7 @@ module.exports = {
             req.user = decoded;
             next();
         } catch (error) {
+            console.error(error);
             return res.status(403).json({ error: 'Token inválido.' });
         }
     }

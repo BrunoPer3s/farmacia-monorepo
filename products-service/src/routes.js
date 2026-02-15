@@ -19,6 +19,7 @@ router.get('/:id', autenticado, async (req, res) => {
         if (rows.length === 0) return res.status(404).json({ error: 'Produto não encontrado' });
         res.json(rows[0]);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: 'Erro ao buscar produto' });
     }
 });
@@ -57,6 +58,7 @@ router.put('/:id', apenasAdmin, async (req, res) => {
         
         res.json({ message: 'Produto atualizado com sucesso!' });
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: 'Erro ao atualizar produto' });
     }
 });
@@ -69,6 +71,7 @@ router.delete('/:id', apenasAdmin, async (req, res) => {
 
         res.json({ message: 'Produto removido com sucesso' });
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: 'Erro ao deletar produto' });
     }
 });

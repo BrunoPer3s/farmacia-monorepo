@@ -22,19 +22,19 @@ components:
         name:
           type: string
           example: "Dipirona 500mg"
-        laboratory:
+        description:
           type: string
-          example: "Medley"
+          example: "Analgésico e antitérmico"
         price:
           type: number
           format: float
           example: 5.99
-        stock_quantity:
+        quantity:
           type: integer
           example: 100
-        description:
-          type: string
-          example: "Analgésico e antitérmico"
+        image_url:
+        type: string
+        example: "https://github.com/brunoper3s.png"
 
 security:
   - bearerAuth: []

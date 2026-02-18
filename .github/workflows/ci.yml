@@ -8,7 +8,7 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  BUCKET_NAME: farmacia-relatorios-bruno-vini-2026  
+  BUCKET_NAME: farmacia-relatorios-bruno-vinicius-2026  
 
 jobs:
   test-and-report:
